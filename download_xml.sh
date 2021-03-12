@@ -8,4 +8,4 @@ mywget()
 export -f mywget
 
 # run wget in parallel using 8 thread/connection
-xargs -P 8 -n 1 -I {} bash -c "mywget '{}'" < file_list_zip.txt
+xargs -P 8 -n 1 -I {} bash -c "mywget '{}'" < file_list_xml.txt
