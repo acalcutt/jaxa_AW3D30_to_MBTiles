@@ -11,4 +11,4 @@ mbtilesfile=${OUTPUT_DIR}/out.mbtiles
 
 gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 ${vrtfile} ${INPUT_DIR}/*_DSM.tif
 gdal_translate ${vrtfile} ${mbtilesfile} -of MBTILES
-gdaladdo -r average ${mbtilesfile} 2 4 8 16
+gdaladdo ${mbtilesfile} 2 4 8 16 32 64 128 256 512 1024
