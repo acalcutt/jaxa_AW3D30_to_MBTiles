@@ -34,7 +34,7 @@ prun()
 	
 
 	#create color releif image
-    gdaldem color-relief -of GTiff $filename -alpha shade.ramp $cr
+	gdaldem color-relief -of GTiff $filename -alpha shade.ramp $cr
 	gdal_translate -a_nodata 0 -co COMPRESS=LZW -co ALPHA=YES $cr $crc
 	
 
