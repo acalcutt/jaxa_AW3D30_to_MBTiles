@@ -2,15 +2,15 @@
 for filename in input/*_DSM.tif; do
 
 
-	hs=merged4/"$(basename -s .tif $filename)_HS.tif"
-	hso=merged4/"$(basename -s .tif $filename)_HSO.tif"
-	hsc=merged4/hsc/"$(basename -s .tif $filename)_HSC.tif"
-	cr=merged4/"$(basename -s .tif $filename)_CR.tif"
-	crc=merged4/crc/"$(basename -s .tif $filename)_CRC.tif"
-	mtif=merged4/"$(basename -s .tif $filename)_MG.tif"
-	mgeo=merged4/"$(basename -s .tif $filename)_MG.geo"
-	fint=merged4/"$(basename -s .tif $filename)_FINT.tif"
-	finc=merged4/fin/"$(basename -s .tif $filename)_FIN.tif"
+	hs=images/"$(basename -s .tif $filename)_HS.tif"
+	hso=images/"$(basename -s .tif $filename)_HSO.tif"
+	hsc=images/hsc/"$(basename -s .tif $filename)_HSC.tif"
+	cr=images/"$(basename -s .tif $filename)_CR.tif"
+	crc=images/crc/"$(basename -s .tif $filename)_CRC.tif"
+	mtif=images/"$(basename -s .tif $filename)_MG.tif"
+	mgeo=images/"$(basename -s .tif $filename)_MG.geo"
+	fint=images/"$(basename -s .tif $filename)_FINT.tif"
+	finc=images/fin/"$(basename -s .tif $filename)_FIN.tif"
 	
 	echo $filename
 	#produce a one band grey scale file with pixels values range=[1-255]
