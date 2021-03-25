@@ -7,13 +7,13 @@ prun()
 	
 	hs=merged4/"$(basename -s .tif $filename)_HS.tif"
 	hso=merged4/"$(basename -s .tif $filename)_HSO.tif"
-	hsc=merged4/"$(basename -s .tif $filename)_HSC.tif"
+	hsc=merged4/hsc/"$(basename -s .tif $filename)_HSC.tif"
 	cr=merged4/"$(basename -s .tif $filename)_CR.tif"
-	crc=merged4/"$(basename -s .tif $filename)_CRC.tif"
+	crc=merged4/crc/"$(basename -s .tif $filename)_CRC.tif"
 	mtif=merged4/"$(basename -s .tif $filename)_MG.tif"
 	mgeo=merged4/"$(basename -s .tif $filename)_MG.geo"
 	fint=merged4/"$(basename -s .tif $filename)_FINT.tif"
-	finc=merged4/"$(basename -s .tif $filename)_FIN.tif"
+	finc=merged4/fin/"$(basename -s .tif $filename)_FIN.tif"
 	
 	echo $filename
 	#produce a one band grey scale file with pixels values range=[1-255]
@@ -21,22 +21,23 @@ prun()
 	gdaldem color-relief $hs -alpha hillshade.ramp $hso
 	gdal_translate -co COMPRESS=LZW -co ALPHA=YES $hso $hsc
 	rm $hs
-	rm $hso
+	
 
 	#create color releif image
     gdaldem color-relief -of GTiff $filename -alpha shade.ramp $cr
 	gdal_translate -a_nodata 0 -co COMPRESS=LZW -co ALPHA=YES $cr $crc
-	rm $cr
+	
 
 	#create color releif image with hillshade
 	composite -gravity Center $hsc $crc -alpha Set $mtif
-	listgeo $hsc > $mgeo
-	geotifcp -g $mgeo $mtif $fint
-	gdal_translate -a_nodata 0 -co COMPRESS=LZW -co ALPHA=YES $fint $finc
+	listgeo $filename > $mgeo #Dump geotiff metadata from a file that has it.
+	geotifcp -g $mgeo $mtif $fint #merge the metadata into the composite image
+	gdal_translate -a_nodata 0 -co COMPRESS=LZW -co ALPHA=YES $fint $finc #compress the file
 	rm $mgeo
 	rm $mtif
 	rm $fint
-
+	rm $cr
+	rm $hso
 }
 
 export -f prun
