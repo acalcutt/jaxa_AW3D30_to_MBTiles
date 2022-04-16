@@ -596,6 +596,8 @@ https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N050W175_N055W170.zip
 https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N050W170_N055W165.zip
 https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N050W165_N055W160.zip
 https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N050W160_N055W155.zip
+https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N080W030_N085W025.zip
+https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N080W020_N085W015.zip
 https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N080E010_N085E015.zip
 https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N080E015_N085E020.zip
 https://www.eorc.jaxa.jp/ALOS/aw3d30/data/release_v2012/N080E020_N085E025.zip
