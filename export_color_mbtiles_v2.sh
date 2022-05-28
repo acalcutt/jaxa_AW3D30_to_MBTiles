@@ -2,7 +2,7 @@
 
 
 INPUT_DIR=./input
-OUTPUT_DIR=./output_cr
+OUTPUT_DIR=./output
 vrtfile=${OUTPUT_DIR}/jaxa_color_releif.vrt
 vrtfile2=${OUTPUT_DIR}/jaxa_color_releif2.vrt
 vrtfile3=${OUTPUT_DIR}/jaxa_color_releif3.vrt
@@ -22,3 +22,8 @@ gdal_translate ${vrtfile3} ${mbtilesfile} -of MBTILES
 #cp ${mbtilesfile} ${mbtilesfile}.orig
 echo "Create MBTiles Overview"
 gdaladdo ${mbtilesfile}
+
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30) converted with gdaldem" WHERE name = "description";'
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "baselayer" WHERE name = "type";'
+sqlite3 ${mbtiles} 'INSERT INTO metadata (name,value) VALUES(''attribution'',''<a href="https://earth.jaxa.jp/en/data/policy/">AW3D30 (JAXA)</a>'');'
+
