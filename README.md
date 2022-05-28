@@ -2,11 +2,10 @@
 Scripts to create a mbtiles file from jaxa AW3D30 elevation images. To download jaxa data please register an account with them first.
 
 
-Steps
-1.) Download JAXA XML files which contain zip urls. Extract the urls from the XML file and place them into file_list_zip.txt. (ex. I used 'download_xml.sh', merged the xml files into one big file, then put the text into a website thate would strip out the urls)
+1.) Download all the jaxa DEM images using download_zips.sh . This downloads all the zip files in file_list_zip.txt. ** Be sure to update the 'jaxa_account' and 'jaxa_password' before running download_zips.sh **
 
-2.) Download all the JAXA zip files (ex. download_zips.sh). Extract all the *_DSM.tif files and place them into a 'input' folder in this scipts directory
+2.) Create a TerrainRGB mbtiles file using create_terrainrgb.sh . This will use gdal and rio rgbify to convert the jaxa dems into TerrainRGB.
 
-3.) Generate Transparent Hillshade, Color Releif, and Merged Files (ex. 'create_hs_cr_images.sh' or 'create_hs_cr_images_parallel.sh')
+3.) Create a Color Relief mbtiles file using export_color_mbtiles_v2.sh. This will use gdaldem color-relief to convert the jaxa dems into a color relief map
 
-4.) Create a mbtiles tileset (ex. 'export_hillshade_mbtiles.sh' or 'export_color_mbtiles.sh', or 'export_combined_mbtiles.sh')
+4.) Create a Hillshade mbtiles file using export_hillshade_mbtiles_v2.sh. This will use gdaldem hillshade to convert the jaxa dems into a hillshade map.
