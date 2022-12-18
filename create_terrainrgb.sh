@@ -12,6 +12,7 @@ vrtfile2=${OUTPUT_DIR}/jaxa_tilergb0-12_warp.vrt
 gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 ${vrtfile} ${INPUT_DIR}/*_DSM.tif
 gdalwarp -r cubicspline -t_srs EPSG:3857 -dstnodata 0 -co COMPRESS=DEFLATE ${vrtfile} ${vrtfile2}
 
+#make use of rounding see details in https://github.com/mapbox/rio-rgbify/pull/34
 for n in 4 5 6 7 8 9 10 11 12 13 14 16; do
     zoom=$((12-$n+4))
     rio rgbify -b -10000 -i 0.1 --min-z ${zoom} --max-z ${zoom} -j 24 --round-digits ${n} --format png ${vrtfile2} ${zoom}-tmp.mbtile
