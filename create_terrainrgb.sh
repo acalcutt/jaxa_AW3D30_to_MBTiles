@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-
-INPUT_DIR=/data/mapping/AW3D30
-OUTPUT_DIR=/data/mapping/AW3D30
+rioworkers=${3:-`sysctl -n kern.smp.cpus`}
+INPUT_DIR=${1:-/data/mapping/AW3D30}
+OUTPUT_DIR=${2:-/data/mapping/AW3D30}
 vrtfile=${OUTPUT_DIR}/jaxa_tilergb0-12.vrt
 mbtiles=${OUTPUT_DIR}/jaxa_tilergb0-12.mbtiles
-vrtfile2=${OUTPUT_DIR}/jaxa_tilergb0-12_warp.vrt
+vrtfile2=${OUTPUT_DIR}/jaxa_tilergb0-12-warp.tif
 
 [ -d "$OUTPUT_DIR" ] || mkdir -p $OUTPUT_DIR || { echo "error: $OUTPUT_DIR " 1>&2; exit 1; }
 
 find ${INPUT_DIR} -name \*_DSM.tif > ${OUTPUT_DIR}/JAXA_DSM.list
 #rm rio/*
-gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 -input_file_list ${OUTPUT_DIR}/JAXA_DSM.list ${vrtfile} 
-gdalwarp -r cubicspline -t_srs EPSG:3857 -dstnodata 0 -co COMPRESS=DEFLATE ${vrtfile} ${vrtfile2}
+gdalbuildvrt -srcnodata -9999 -vrtnodata -9999 -input_file_list ${OUTPUT_DIR}/JAXA_DSM.list ${vrtfile}
+gdalwarp -r cubicspline -t_srs EPSG:3857 -dstnodata 0 -multi -co NUM_THREADS=ALL_CPUS -wo NUM_THREADS=ALL_CPUS --config GDAL_CACHEMAX 50% -co COMPRESS=DEFLATE -co BIGTIFF=YES ${vrtfile} ${vrtfile2}
+
 
 #make use of rounding see details in https://github.com/mapbox/rio-rgbify/pull/34
-for n in 16 15 14 13 12 11 10 9 8 7 6 5 4; do
+for n in 12 11 10 9 8 7 6 5 4; do
     zoom=$((12-$n+4))
-    rio rgbify -b -10000 -i 0.1 --min-z ${zoom} --max-z ${zoom} -j 24 --round-digits ${n} --format png ${vrtfile2} ${zoom}-tmp.mbtile
+    rio rgbify --verbose --base-val -10000 --interval 0.1 --min-z ${zoom} --max-z ${zoom} --workers ${rioworkers} --round-digits ${n} --format png ${vrtfile2} ${zoom}-tmp.mbtiles
  done
 
 cp ${zoom}-tmp.mbtile ${mbtiles}
@@ -47,12 +48,11 @@ REPLACE INTO tiles SELECT * FROM r10.tiles;
 REPLACE INTO tiles SELECT * FROM r11.tiles;
 REPLACE INTO tiles SELECT * FROM r12.tiles;
 CREATE UNIQUE INDEX tile_index on tiles (zoom_level, tile_column, tile_row);
-UPDATE metadata SET value = "jaxa_terrainrgb_0-12" WHERE name = "name" AND value = "";
-UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30) converted with rio rgbify" WHERE name = "description";
-UPDATE metadata SET value = "png" WHERE name = "format";
-UPDATE metadata SET value = "1" WHERE name = "version";
-UPDATE metadata SET value = "baselayer" WHERE name = "type";
+UPDATE metadata SET value = 'jaxa_terrainrgb_0-12' WHERE name = 'name' AND value = '';
+UPDATE metadata SET value = 'JAXA ALOS World 3D 30m (AW3D30) converted with rio rgbify' WHERE name = 'description';
+UPDATE metadata SET value = 'png' WHERE name = 'format';
+UPDATE metadata SET value = '1' WHERE name = 'version';
+UPDATE metadata SET value = 'baselayer' WHERE name = 'type';
 INSERT INTO metadata (name,value) VALUES(''attribution'',''<a href="https://earth.jaxa.jp/en/data/policy/">AW3D30 (JAXA)</a>'');
 PRAGMA journal_mode=DELETE;
 "
-
