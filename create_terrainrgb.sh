@@ -20,7 +20,7 @@ done
 cp ${OUTPUT_DIR}/0-tmp.mbtiles ${mbtiles}
 
 for n in 1 2 3 4 5 6 7 8 9 10 11 12; do
-echo "copying '${n}'"
+echo "copying '${OUTPUT_DIR}/${n} into ${mbtiles}'"
 sqlite3 ${mbtiles} "
 ATTACH DATABASE '${OUTPUT_DIR}/${n}-tmp.mbtiles' AS r${n};
 REPLACE INTO tiles SELECT * FROM r${n}.tiles;
@@ -34,5 +34,5 @@ sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30)
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "png" WHERE name = "format";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "1" WHERE name = "version";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "baselayer" WHERE name = "type";'
-sqlite3 ${mbtiles} 'INSERT INTO metadata (name,value) VALUES(''attribution'',''<a href="https://earth.jaxa.jp/en/data/policy/">AW3D30 (JAXA)</a>'');'
+sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES(''attribution'',''<a href=""https://earth.jaxa.jp/en/data/policy/"">AW3D30 (JAXA)</a>');"
 sqlite3 ${mbtiles} 'PRAGMA journal_mode=DELETE;'
