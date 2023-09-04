@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#custom version of rio rgbify which adds speed improvements is reccomended https://github.com/acalcutt/rio-rgbify
+
 INPUT_DIR=./input
 OUTPUT_DIR=./output
 vrtfile=${OUTPUT_DIR}/jaxa_terrainrgb0-11.vrt
