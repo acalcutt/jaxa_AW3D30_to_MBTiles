@@ -19,7 +19,7 @@ sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30)
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "png" WHERE name = "format";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "1" WHERE name = "version";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "baselayer" WHERE name = "type";'
-sqlite3 ${mbtiles} 'INSERT INTO metadata (name,value) VALUES(''attribution'',''<a href="https://earth.jaxa.jp/en/data/policy/">AW3D30 (JAXA)</a>'');'
+sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('attribution','<a href=""https://earth.jaxa.jp/en/data/policy/"">AW3D30 (JAXA)</a>');"
 sqlite3 ${mbtiles} 'PRAGMA journal_mode=DELETE;'
 
 
