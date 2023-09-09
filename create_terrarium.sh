@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Requires custom version of rio rgbify, which adds terrarium encoding support https://github.com/acalcutt/rio-rgbify/tree/terrarium
+#Requires custom version of rio rgbify which adds terrarium encoding support ( https://github.com/acalcutt/rio-rgbify/ )
 
 INPUT_DIR=./input
 OUTPUT_DIR=./output
