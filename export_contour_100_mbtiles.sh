@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+export TIPPECANOE_MAX_THREADS=12
+
 tippecanoe \
+    --temporary-directory temp_contour \
     `# Set min zoom to 11` \
     -Z7 \
     `# Set max zoom to 13` \
