@@ -4,20 +4,22 @@
 
 INPUT_DIR=./input
 OUTPUT_DIR=./output
-vrtfile=${OUTPUT_DIR}/jaxa_terrainrgb0-11.vrt
-mbtiles=${OUTPUT_DIR}/jaxa_terrainrgb0-11.mbtiles
-vrtfile2=${OUTPUT_DIR}/jaxa_terrainrgb0-11_warp.vrt
+MINZOOM=0
+MAXZOOM=11
+vrtfile=${OUTPUT_DIR}/jaxa_terrainrgb_${MINZOOM}-${MAXZOOM}.vrt
+mbtiles=${OUTPUT_DIR}/jaxa_terrainrgb_${MINZOOM}-${MAXZOOM}.mbtiles
+vrtfile2=${OUTPUT_DIR}/jaxa_terrainrgb_${MINZOOM}-${MAXZOOM}_warp.vrt
 
 [ -d "$OUTPUT_DIR" ] || mkdir -p $OUTPUT_DIR || { echo "error: $OUTPUT_DIR " 1>&2; exit 1; }
 
 #rm rio/*
 gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 ${vrtfile} ${INPUT_DIR}/*_DSM.tif
 gdalwarp -r cubicspline -t_srs EPSG:3857 -dstnodata 0 -co COMPRESS=DEFLATE ${vrtfile} ${vrtfile2}
-rio rgbify -b -10000 -i 0.1 --min-z 0 --max-z 11 -j 12 --format png ${vrtfile2} ${mbtiles}
+rio rgbify -b -10000 -i 0.1 --min-z $MINZOOM --max-z $MAXZOOM -j 12 --format png ${vrtfile2} ${mbtiles}
 
 sqlite3 ${mbtiles} 'CREATE UNIQUE INDEX tile_index on tiles (zoom_level, tile_column, tile_row);'
-sqlite3 ${mbtiles} 'UPDATE metadata SET value = "jaxa_terrainrgb_0-11" WHERE name = "name" AND value = "";'
-sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30 v2023) converted with rio rgbify" WHERE name = "description";'
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "jaxa_terrainrgb_'${MINZOOM}'-'${MAXZOOM}'" WHERE name = "name" AND value = "";'
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30 v4.0) converted with rio rgbify" WHERE name = "description";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "png" WHERE name = "format";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "1" WHERE name = "version";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "baselayer" WHERE name = "type";'
