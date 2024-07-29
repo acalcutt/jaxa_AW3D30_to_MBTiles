@@ -31,7 +31,7 @@ export -f mycurl myunzip
 
 cd download
 
-# run wget in parallel using 8 thread/connection
+# run curl in parallel using 8 thread/connection
 xargs -P 8 -I {} bash -c "mycurl '{}'" < ../file_list_zip.txt
 
 #unzip the DSM tif files
