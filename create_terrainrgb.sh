@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#custom version of rio rgbify which adds speed improvements is reccomended https://github.com/acalcutt/rio-rgbify
+#custom version of rio rgbify which adds speed improvements is recommended https://github.com/acalcutt/rio-rgbify
 
 INPUT_DIR=./input
 OUTPUT_DIR=./output

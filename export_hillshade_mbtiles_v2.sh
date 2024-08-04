@@ -16,7 +16,7 @@ for filename in ${INPUT_DIR}/*_DSM.tif; do
 	hs=${HSC_OUTPUT_DIR}/"$(basename -s .tif $filename)_HS.tif"
 	hso=${HSC_OUTPUT_DIR}/"$(basename -s .tif $filename)_HSO.tif"
 	hsc=${HSC_OUTPUT_DIR}/"$(basename -s .tif $filename)_HSC.tif"
-	
+
 	gdaldem hillshade -of GTiff $filename $hs -alpha -s 111120 -z 5 -az 315 -alt 60 -compute_edges
 	gdaldem color-relief $hs -alpha hillshade.ramp $hso
 	gdal_translate -co COMPRESS=LZW -co ALPHA=YES $hso $hsc
@@ -24,13 +24,13 @@ for filename in ${INPUT_DIR}/*_DSM.tif; do
 	rm $hso
 done
 
-echo "Builing VRT"
+echo "Building VRT"
 gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 ${vrtfile} ${HSC_OUTPUT_DIR}/*_HSC.tif
 echo "gdalwarp VRT"
 gdalwarp -r bilinear -t_srs EPSG:3857 -dstnodata 0 -co COMPRESS=DEFLATE ${vrtfile} ${vrtfile2}
 echo "Import VRT into MBTiles"
-gdal_translate ${vrtfile2} ${mbtilesfile} -of MBTILES 
-#echo "Backup Origional MBTiles file"
+gdal_translate ${vrtfile2} ${mbtilesfile} -of MBTILES
+#echo "Backup Original MBTiles file"
 #cp ${mbtilesfile} ${mbtilesfile}.orig
 echo "Create MBTiles Overview"
 gdaladdo -r bilinear ${mbtilesfile}

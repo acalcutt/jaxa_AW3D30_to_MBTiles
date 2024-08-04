@@ -14,24 +14,24 @@ prun()
 {
 
 	filename="input/$1"
-	
+
 
 	shp=/opt/jaxa_AW3D30_to_MBTiles/con/"$(basename -s .tif $filename)_CON.shp"
 	json=/opt/jaxa_AW3D30_to_MBTiles/json/"$(basename -s .tif $filename)_CON.geojson"
-	
+
 	echo $filename
 	echo $shp
 
-	#create countor shape
+	#create contour shape
 	gdal_contour -a elev -i 250 ${filename} ${shp}
-	
+
 	#convert to geojson
 	ogr2ogr -f GeoJSON ${json} ${shp}
-	
+
 	rm=/opt/jaxa_AW3D30_to_MBTiles/con/"$(basename -s .tif $filename)_CON.*"
-	
+
 	echo $rm
-	
+
 	rm $rm
 
 }
