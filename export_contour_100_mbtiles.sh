@@ -14,7 +14,7 @@ tippecanoe \
     -y elev \
     `# Put contours into layer named 'contour_100m'` \
     -l contour_100m \
-    `# Export to contour_250m.mbtiles` \
+    `# Export to contour_100m.mbtiles` \
     -o contour_100m.mbtiles \
     --no-feature-limit --no-tile-size-limit \
     json_100/*.geojson
