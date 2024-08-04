@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export TIPPECANOE_MAX_THREADS=12
+[[ $TIPPECANOE_MAX_THREADS ]] || TIPPECANOE_MAX_THREADS=12
+export TIPPECANOE_MAX_THREADS
 
 tippecanoe \
     --temporary-directory temp_contour \
