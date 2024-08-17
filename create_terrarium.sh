@@ -4,21 +4,29 @@
 
 INPUT_DIR=./input
 OUTPUT_DIR=./output
-vrtfile=${OUTPUT_DIR}/jaxa_terrarium0-11.vrt
-mbtiles=${OUTPUT_DIR}/jaxa_terrarium0-11.mbtiles
-vrtfile2=${OUTPUT_DIR}/jaxa_terrarium0-11_warp.vrt
+
+[[ $THREADS ]] || THREADS=12
+[[ $VERSION ]] || VERSION=v4.0
+[[ $MINZOOM ]] || MINZOOM=0
+[[ $MAXZOOM ]] || MAXZOOM=11
+[[ $FORMAT ]] || FORMAT=png
+
+BASENAME=jaxa_terrarium_${MINZOOM}-${MAXZOOM}_${FORMAT}
+vrtfile=${OUTPUT_DIR}/${BASENAME}.vrt
+mbtiles=${OUTPUT_DIR}/${BASENAME}.mbtiles
+vrtfile2=${OUTPUT_DIR}/${BASENAME}_warp.vrt
 
 [ -d "$OUTPUT_DIR" ] || mkdir -p $OUTPUT_DIR || { echo "error: $OUTPUT_DIR " 1>&2; exit 1; }
 
 #rm rio/*
 gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 ${vrtfile} ${INPUT_DIR}/*_DSM.tif
 gdalwarp -r cubicspline -t_srs EPSG:3857 -dstnodata 0 -co COMPRESS=DEFLATE ${vrtfile} ${vrtfile2}
-rio rgbify -e terrarium --min-z 0 --max-z 11 -j 24 --format png ${vrtfile2} ${mbtiles}
+rio rgbify -e terrarium --min-z $MINZOOM --max-z $MAXZOOM -j $THREADS --format $FORMAT ${vrtfile2} ${mbtiles}
 
 sqlite3 ${mbtiles} 'CREATE UNIQUE INDEX tile_index on tiles (zoom_level, tile_column, tile_row);'
-sqlite3 ${mbtiles} 'UPDATE metadata SET value = "jaxa_terrarium_0-11" WHERE name = "name" AND value = "";'
-sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30) converted with rio rgbify" WHERE name = "description";'
-sqlite3 ${mbtiles} 'UPDATE metadata SET value = "png" WHERE name = "format";'
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "'${BASENAME}'" WHERE name = "name" AND value = "";'
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "JAXA ALOS World 3D 30m (AW3D30 '${VERSION}') converted with rio rgbify" WHERE name = "description";'
+sqlite3 ${mbtiles} 'UPDATE metadata SET value = "'${FORMAT}'" WHERE name = "format";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "1" WHERE name = "version";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "baselayer" WHERE name = "type";'
 sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('attribution','<a href=""https://earth.jaxa.jp/en/data/policy/"">AW3D30 (JAXA)</a>');"
