@@ -6,7 +6,7 @@ INPUT_DIR=./input
 OUTPUT_DIR=./output
 
 [[ $THREADS ]] || THREADS=12
-[[ $VERSION ]] || VERSION=v4.0
+[[ $VERSION ]] || VERSION=v4.1
 [[ $MINZOOM ]] || MINZOOM=0
 [[ $MAXZOOM ]] || MAXZOOM=11
 [[ $FORMAT ]] || FORMAT=png
