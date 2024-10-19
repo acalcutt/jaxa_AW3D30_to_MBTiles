@@ -31,7 +31,6 @@ sqlite3 ${mbtiles} 'UPDATE metadata SET value = "'${FORMAT}'" WHERE name = "form
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "1" WHERE name = "version";'
 sqlite3 ${mbtiles} 'UPDATE metadata SET value = "baselayer" WHERE name = "type";'
 sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('attribution','<a href=""https://earth.jaxa.jp/en/data/policy/"">AW3D30 (JAXA)</a>');"
-sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('attribution','<a href=""https://earth.jaxa.jp/en/data/policy/"">AW3D30 (JAXA)</a>');"
 sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('minzoom','${MINZOOM}');"
 sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('maxzoom','${MAXZOOM}');"
 sqlite3 ${mbtiles} "INSERT INTO metadata (name,value) VALUES('bounds','-180,-90,180,90');"
